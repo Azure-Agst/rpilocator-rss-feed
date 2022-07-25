@@ -2,14 +2,19 @@ import requests
 import feedparser
 import time
 import json
+import os
 
 # Feed URL
-FEED_URL = 'https://rpilocator.com/feed/'
-# FEED_URL = 'https://hwlocator.com/feed/'
+# FEED_URL = 'https://pilocator.com/feed/'
+FEED_URL = os.getenv('FEED_URL')
+if not FEED_URL:
+    raise Exception('FEED_URL not set!')
 
 # After creating your pushbullet account, create an 
 # Access Token and enter it here
-PUSHBULLET_TOKEN = '<your access token here>'
+PUSHBULLET_TOKEN = os.getenv('PUSHBULLET_TOKEN')
+if not PUSHBULLET_TOKEN:
+    raise Exception('PUSHBULLET_TOKEN not set!')
 
 # Customize the message title
 MESSAGE_TITLE = 'xlocator Stock Alert'

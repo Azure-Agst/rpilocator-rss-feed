@@ -2,14 +2,21 @@ import requests
 import feedparser
 import time
 import json
+import os
 
 # Feed URL
-FEED_URL = 'https://rpilocator.com/feed/'
-# FEED_URL = 'https://hwlocator.com/feed/'
+# FEED_URL = 'https://pilocator.com/feed/'
+FEED_URL = os.getenv('FEED_URL')
+if not FEED_URL:
+    raise Exception('FEED_URL not set!')
 
 # Gotify settings
-GOTIFY_BASE_URL = '<your gotify server url>'
-GOTIFY_TOKEN = '<your gotify app token>'
+GOTIFY_BASE_URL = os.getenv('GOTIFY_BASE_URL')
+if not GOTIFY_BASE_URL:
+    raise Exception('GOTIFY_BASE_URL not set!')
+GOTIFY_TOKEN = os.getenv('GOTIFY_TOKEN')
+if not GOTIFY_TOKEN:
+    raise Exception('GOTIFY_TOKEN not set!')
 GOTIFY_PRIORITY = 5
 
 # Customize the message title

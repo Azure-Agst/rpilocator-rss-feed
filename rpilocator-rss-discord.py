@@ -9,16 +9,11 @@ FEED_URL = os.getenv('FEED_URL')
 if not FEED_URL:
     raise Exception('FEED_URL not set!')
 
-# After creating your Pushover account, register your application
-# User Key
-PUSHOVER_KEY = os.getenv('PUSHOVER_KEY')
-if not PUSHOVER_KEY:
-    raise Exception('PUSHOVER_KEY not set!')
-
-# Application Key
-PUSHOVER_API_KEY = os.getenv('PUSHOVER_API_KEY')
-if not PUSHOVER_API_KEY:
-    raise Exception('PUSHOVER_API_KEY not set!')
+# Create a Discord Webhook and 
+# copy the URL here
+WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+if not WEBHOOK_URL:
+    raise Exception('WEBHOOK_URL not set!')
 
 # Customize the message title
 MESSAGE_TITLE = 'xlocator Stock Alert'
@@ -29,17 +24,22 @@ USER_AGENT = 'xlocator feed alert'
 # Create the message body
 def formatMessage(entry):
 
-    messageData = 'token='+PUSHOVER_API_KEY+'&user='+PUSHOVER_KEY+'&title='+MESSAGE_TITLE
+    data = {
+        "embeds": [
+            {
+                "description": entry.title + '\n' + entry.link,
+                "title": MESSAGE_TITLE
+            }
+        ],
+    }
 
-    message = messageData+'&message='+entry.title+'&url='+entry.link
-
-    return message
+    return data
 
 # Send the push/message to all devices connected to Pushbullet
 def sendMessage(message):
-    
+
     try:
-        req = requests.post(url='https://api.pushover.net/1/messages.json', data=message, timeout=20)
+        requests.post(WEBHOOK_URL, json=message)
     except requests.exceptions.Timeout:
         print('Request Timeout')
         pass
@@ -82,6 +82,3 @@ while True:
             control.append(entries.id)
 
     time.sleep(59)
-
-
-
